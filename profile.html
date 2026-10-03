@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>پروفایل دانش‌آموز | سیتالوپلن</title>
+  <link rel="stylesheet" href="css/student-app.css">
+</head>
+<body>
+<header class="student-header">
+  <div class="shell student-nav">
+    <a class="student-brand" href="index.html">
+      <img src="assets/logo.png" alt="سیتالوپلن">
+      <div><strong>سیتالوپلن</strong><span>همراه امروز، برای فردای بهتر</span></div>
+    </a>
+    <div class="nav-spacer"></div>
+    <a class="nav-link" href="index.html">صفحه اصلی</a>
+    <button class="logout-btn" id="logoutBtn">خروج</button>
+  </div>
+</header>
+
+<main>
+  <div class="shell">
+    <section class="profile-hero">
+      <div>
+        <span class="eyebrow">پروفایل انتخاب مسیر</span>
+        <h1 id="studentName"></h1>
+        <p id="studentCore"></p>
+        <div class="hero-badges" id="heroBadges"></div>
+      </div>
+      <div class="hero-code">
+        <small>کد غالب RIASEC</small>
+        <strong id="riasecCode"></strong>
+        <small>این کد حکم انتخاب رشته نیست؛ لنزی برای فهم محیط‌های مناسب‌تر توست.</small>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>قطب‌نمای تو</h2>
+      <p>جمع‌بندی کوتاه از چیزی که در تحلیل RIASEC و CDDQ برای تصمیم تو مهم است.</p>
+    </div>
+    <section class="compass-grid">
+      <article class="card compass-card">
+        <h3>چه محیط‌هایی بیشتر به تو انرژی می‌دهند؟</h3>
+        <p id="studentCore2"></p>
+        <div class="focus-list" id="focusList"></div>
+      </article>
+      <article class="card compass-card">
+        <h3>گره اصلی تصمیم الان کجاست؟</h3>
+        <p id="studentDecision"></p>
+        <p id="studentValues"></p>
+      </article>
+    </section>
+
+    <div class="section-title">
+      <h2>کارنامه تصویری من</h2>
+      
+    </div>
+    <section class="card poster-card">
+      <div class="poster-preview">
+        <img id="posterImage" src="" alt="کارنامه تصویری RIASEC و CDDQ کیانا">
+      </div>
+      <div>
+        <h3>کارنامه تحلیل مسیر</h3>
+        <p>
+          برای تصمیم نهایی، داده‌های کارنامه را کنار واقعیت‌های رشته‌ها بررسی کن.
+        </p>
+        <div class="poster-actions">
+          <button class="primary-action" id="openPoster">مشاهده بزرگ</button>
+          <a class="secondary-action" id="downloadPoster" download>ذخیره تصویر</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-title">
+      <h2>لیست رشته‌های انتخابی تو</h2>
+      <p>اطلاعات این بخش بر اساس پروفایل شخصی خودت ساخته شده است.</p>
+    </div>
+    <section class="major-grid" id="majorGrid"></section>
+
+    <div class="section-title">
+      <h2>گام بعدی پیشنهادی</h2>
+      <p>هدف این مرحله تصمیم فوری نیست؛ تبدیل ابهام به سؤال قابل بررسی است.</p>
+    </div>
+    <section class="steps">
+      <div class="step"><strong>۱</strong><h3>جست‌وجوی واقعیت</h3><p>برای هر رشته، زندگی روزمره، طول مسیر، درآمد، استقلال و سبک زندگی را ببین.</p></div>
+      <div class="step"><strong>۲</strong><h3>تجربه کوچک</h3><p>با دانشجو یا شاغل واقعی گفت‌وگو کن و در صورت امکان، چند روزی را در محیط کاری یا تحصیلی آن‌ها بگذران و واکنش خودت را بعد از این تجربه ثبت کن.</p></div>
+      <div class="step"><strong>۳</strong><h3>اولویت‌بندی</h3><p>درآمد، استقلال، پرستیژ، ارتباط، زمان آزاد و مهاجرت را جداگانه وزن بده.</p></div>
+    </section>
+  </div>
+</main>
+
+<div class="modal" id="posterModal" aria-hidden="true">
+  <div class="modal-panel">
+    <button class="modal-close" id="closePoster">×</button>
+    <img id="posterLarge" alt="کارنامه تصویری بزرگ">
+  </div>
+</div>
+
+<script src="js/auth.js"></script>
+<script src="data/majors-data.js"></script>
+<script src="data/students.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

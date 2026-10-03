@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ورود دانش‌آموز | سیتالوپلن</title>
+  <link rel="stylesheet" href="css/student-app.css">
+</head>
+<body>
+  <div class="login-wrap">
+    <section class="login-box">
+      <div class="login-brand">
+        <img src="assets/logo.png" alt="سیتالوپلن">
+        <h1>ورود به پروفایل دانش‌آموز</h1>
+        
+      </div>
+
+      <form id="loginForm">
+        <label class="form-field">
+          <span>نام کاربری</span>
+          <input id="username" autocomplete="username" required>
+        </label>
+        <label class="form-field">
+          <span>رمز عبور</span>
+          <input id="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="login-submit" type="submit">ورود به پروفایل</button>
+        <div class="login-error" id="loginError">نام کاربری یا رمز عبور درست نیست.</div>
+      </form>
+</section>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ok = await CitaloAuth.login(
+        document.getElementById('username').value,
+        document.getElementById('password').value
+      );
+      if (ok) {
+        location.href = 'profile.html';
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    });
+    const s = CitaloAuth.session();
+    if (s?.studentId) location.href = 'profile.html';
+  </script>
+</body>
+</html>
