@@ -177,25 +177,25 @@ function renderLeadGate() {
     localStorage.setItem('citaloplan_last_lead', JSON.stringify(localLead));
     track('lead_submitted', { grade: localLead.grade, concern: localLead.concern, helpNeeded: localLead.helpNeeded });
 
-    const originalText = submitBtn.textContent;
     submitBtn.disabled = true;
-    submitBtn.textContent = 'در حال ثبت اطلاعات...';
+    submitBtn.textContent = 'نتیجه آماده است...';
 
-    try {
-      if (location.protocol !== 'file:') {
-        await fetch(GOOGLE_SHEET_ENDPOINT, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-          body: payload.toString()
-        });
-      }
-      renderResult();
-    } catch (err) {
-      console.error('Google Sheet submission error:', err);
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
-      alert('ثبت اطلاعات با مشکل روبه‌رو شد. لطفاً اتصال اینترنت را بررسی کن و دوباره تلاش کن.');
+    // UX-first: نتیجه را بلافاصله نمایش بده و ثبت Google Sheet را
+    // در پس‌زمینه انجام بده تا کندی Apps Script کاربر را معطل نکند.
+    renderResult();
+
+    if (location.protocol !== 'file:') {
+      fetch(GOOGLE_SHEET_ENDPOINT, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: payload.toString()
+      }).catch((err) => {
+        // اطلاعات همچنان در localStorage ذخیره شده است؛
+        // شکست شبکه نباید تجربه نتیجه را متوقف کند.
+        console.error('Google Sheet background submission error:', err);
+      });
     }
   });
 }
