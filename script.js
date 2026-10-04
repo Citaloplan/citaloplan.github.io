@@ -6,38 +6,47 @@ const quizStepLabel = document.getElementById('quizStepLabel');
 const startButtons = document.querySelectorAll('[data-start-quiz]');
 const leadTemplate = document.getElementById('leadFormTemplate');
 
+const GOOGLE_SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbz_BzY5SGa4OMEuVgqR7ddD8wNCITUXM6tLTuGOR_ZGDdjGgVeMf4-xMESCx9hHO7hW/exec';
 const quizState = { step: 0, answers: {} };
 
 const questions = [
   {
-    key: 'segment',
-    title: 'اول بگو از کدام مسیر وارد شدی؟',
-    subtitle: 'تا سؤال‌ها را متناسب‌تر جلو ببریم.',
-    options: ['پایه نهم', 'پایه دوازدهم', 'والد']
+    key: 'concern',
+    title: 'الان چه چیزی بیشتر ذهنت را درگیر کرده؟',
+    subtitle: 'اگر فقط یکی را انتخاب کنی، کدام بیشتر ذهنت را درگیر کرده؟',
+    type: 'choice',
+    options: [
+      'رشته‌ای را انتخاب کنم و بعداً پشیمان شوم.',
+      'رشته‌ای را دوست داشته باشم ولی بازار کار خوبی نداشته باشد.',
+      'انتخابم با سبک زندگی‌ای که می‌خواهم سازگار نباشد.',
+      'بعداً برای مهاجرت یا تغییر مسیر محدود شوم.',
+      'تحت تأثیر خانواده یا اطرافیان تصمیم نامناسبی بگیرم.',
+      'با رتبه‌ام انتخاب‌های اشتباهی انجام دهم.',
+      'هنوز دقیق نمی‌دانم.'
+    ]
   },
   {
-    key: 'mainConcern',
-    title: 'الان کدام نگرانی بیشتر ذهنت را درگیر کرده؟',
-    subtitle: 'جواب درست و غلطی وجود ندارد.',
-    options: ['انتخاب اشتباه و پشیمانی', 'قبول نشدن در گزینه دلخواه', 'آینده شغلی و درآمد', 'مهاجرت و امکان تغییر مسیر', 'فشار یا اختلاف نظر خانواده', 'هنوز دقیق نمی‌دانم']
+    key: 'helpNeeded',
+    title: 'اگر قرار باشد فعلاً فقط در یک بخش به تو کمک کنیم، به کدام‌یک بیشتر احتیاج داری؟',
+    subtitle: 'همان چیزی را انتخاب کن که اگر روشن‌تر شود، تصمیم‌گیری برایت راحت‌تر می‌شود.',
+    type: 'choice',
+    options: [
+      'بفهمم چه رشته‌هایی بیشتر به من می‌آیند.',
+      'بین چند گزینه‌ای که دارم مقایسه کنم.',
+      'واقعیت رشته‌ها و شغل‌های مرتبط را بهتر بشناسم.',
+      'بفهمم با رتبه‌ام کجاها شانس قبولی دارم.',
+      'درباره بازار کار، درآمد و آینده رشته‌ها بدانم.',
+      'مسیر مهاجرت هر رشته را بررسی کنم.',
+      'بتوانم با خانواده درباره انتخابم منطقی‌تر صحبت کنم.',
+      'یک نفر کل شرایط من را ببیند و کمکم کند تصمیم نهایی بگیرم.'
+    ]
   },
   {
-    key: 'priority',
-    title: 'اگر مجبور باشی فقط یکی را جلوتر بگذاری، کدام مهم‌تر است؟',
-    subtitle: 'این سؤال کمک می‌کند معیار تصمیم تو را بهتر بفهمیم.',
-    options: ['علاقه و رضایت شخصی', 'درآمد و امنیت شغلی', 'سبک زندگی و زمان آزاد', 'اعتبار و جایگاه اجتماعی', 'فرصت مهاجرت', 'انعطاف برای تغییر مسیر']
-  },
-  {
-    key: 'certainty',
-    title: 'الان چقدر درباره مسیرت مطمئنی؟',
-    subtitle: 'حس فعلی خودت را انتخاب کن.',
-    options: ['تقریباً تصمیمم را گرفته‌ام', 'بین ۲ یا ۳ گزینه مرددم', 'گزینه‌های زیادی دارم و گیجم', 'تقریباً هیچ تصویر روشنی ندارم']
-  },
-  {
-    key: 'help',
-    title: 'اگر بخواهیم فقط در یک بخش کمکت کنیم، کدام ارزشمندتر است؟',
-    subtitle: 'این جواب مشخص می‌کند در ادامه روی چه چیزی تمرکز کنیم.',
-    options: ['شناخت بهتر خودم', 'شناخت واقعیت رشته‌ها', 'مقایسه گزینه‌ها', 'بررسی قبولی با رتبه و شرایط من', 'ساختن گزینه‌های جایگزین', 'کاهش استرس و منظم کردن تصمیم']
+    key: 'paths',
+    title: 'الان بیشتر به چه رشته‌ها یا مسیرهایی فکر می‌کنی؟',
+    subtitle: 'اگر هنوز مطمئن نیستی هم می‌توانی همین را بنویسی.',
+    type: 'text',
+    placeholder: 'مثلاً داروسازی، علوم کامپیوتر یا هنوز مطمئن نیستم...'
   }
 ];
 
@@ -77,7 +86,6 @@ function closeQuiz() {
 startButtons.forEach(btn => btn.addEventListener('click', openQuiz));
 quizClose.addEventListener('click', closeQuiz);
 quizModal.addEventListener('click', e => { if (e.target === quizModal) closeQuiz(); });
-
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && quizModal.classList.contains('open')) closeQuiz(); });
 
 function renderQuestion() {
@@ -85,27 +93,43 @@ function renderQuestion() {
   quizStepLabel.textContent = `مرحله ${toFaNumber(quizState.step + 1)} از ${toFaNumber(questions.length)}`;
   quizProgress.style.width = `${((quizState.step + 1) / questions.length) * 100}%`;
 
+  const answerArea = q.type === 'text'
+    ? `<div class="quiz-text-wrap"><input class="quiz-text-answer" type="text" autocomplete="off" placeholder="${escapeHtml(q.placeholder)}" /></div>`
+    : `<div class="answer-grid">${q.options.map(option => `<button class="answer-btn" type="button" data-answer="${escapeHtml(option)}">${escapeHtml(option)}</button>`).join('')}</div>`;
+
   quizContent.innerHTML = `
     <div class="quiz-page">
-      <span class="mini-badge">قطب‌نمای انتخاب</span>
+      <span class="mini-badge">شروع انتخاب آگاهانه</span>
       <h2 id="quizTitle">${q.title}</h2>
       <p>${q.subtitle}</p>
-      <div class="answer-grid">
-        ${q.options.map(option => `<button class="answer-btn" type="button" data-answer="${escapeHtml(option)}">${escapeHtml(option)}</button>`).join('')}
-      </div>
+      ${answerArea}
       <button class="primary-btn quiz-next" type="button" disabled>ادامه</button>
     </div>
   `;
 
-  let selected = null;
-  const answerButtons = quizContent.querySelectorAll('.answer-btn');
   const nextBtn = quizContent.querySelector('.quiz-next');
-  answerButtons.forEach(btn => btn.addEventListener('click', () => {
-    answerButtons.forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    selected = btn.dataset.answer;
-    nextBtn.disabled = false;
-  }));
+  let selected = '';
+
+  if (q.type === 'text') {
+    const input = quizContent.querySelector('.quiz-text-answer');
+    input.addEventListener('input', () => {
+      selected = input.value.trim();
+      nextBtn.disabled = !selected;
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && selected) nextBtn.click();
+    });
+    setTimeout(() => input.focus(), 50);
+  } else {
+    const answerButtons = quizContent.querySelectorAll('.answer-btn');
+    answerButtons.forEach(btn => btn.addEventListener('click', () => {
+      answerButtons.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selected = btn.dataset.answer;
+      nextBtn.disabled = false;
+    }));
+  }
+
   nextBtn.addEventListener('click', () => {
     if (!selected) return;
     quizState.answers[q.key] = selected;
@@ -128,93 +152,103 @@ function renderLeadGate() {
   quizContent.appendChild(node);
 
   const form = quizContent.querySelector('#leadForm');
-  const segmentField = quizContent.querySelector('#segmentField');
-  const answersField = quizContent.querySelector('#quizAnswersField');
-  const scoreField = quizContent.querySelector('#leadScoreField');
-
-  if (quizState.answers.segment) segmentField.value = quizState.answers.segment;
-  const leadScore = calculateLeadScore();
-  answersField.value = JSON.stringify(quizState.answers);
-  scoreField.value = leadScore;
+  const submitBtn = form.querySelector('button[type="submit"]');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(form);
     const mobileRaw = (formData.get('mobile') || '').toString().trim();
-    const mobile = faToEnDigits(mobileRaw).replace(/\s|-/g, '');
+    const mobile = faToEnDigits(mobileRaw).replace(/[\s-]/g, '');
     if (!/^09\d{9}$/.test(mobile)) {
       alert('لطفاً شماره موبایل را به شکل ۰۹۱۲۱۲۳۴۵۶۷ وارد کن.');
       return;
     }
-    formData.set('mobile', mobile);
 
-    track('lead_submitted', { segment: formData.get('segment'), leadScore });
-    const leadObject = Object.fromEntries(formData.entries());
-    localStorage.setItem('citaloplan_last_lead', JSON.stringify(leadObject));
+    const payload = new URLSearchParams();
+    payload.set('name', (formData.get('name') || '').toString().trim());
+    payload.set('mobile', mobile);
+    payload.set('grade', (formData.get('grade') || '').toString().trim());
+    payload.set('concern', quizState.answers.concern || '');
+    payload.set('helpNeeded', quizState.answers.helpNeeded || '');
+    payload.set('paths', quizState.answers.paths || '');
+    payload.set('consent', formData.get('consent') === 'true' ? 'true' : 'false');
 
-    if (location.protocol !== 'file:') {
-      try {
-        await fetch('/', {
+    const localLead = Object.fromEntries(payload.entries());
+    localStorage.setItem('citaloplan_last_lead', JSON.stringify(localLead));
+    track('lead_submitted', { grade: localLead.grade, concern: localLead.concern, helpNeeded: localLead.helpNeeded });
+
+    const originalText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'در حال ثبت اطلاعات...';
+
+    try {
+      if (location.protocol !== 'file:') {
+        await fetch(GOOGLE_SHEET_ENDPOINT, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData).toString()
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+          body: payload.toString()
         });
-      } catch (err) {
-        console.warn('Form submission fallback:', err);
       }
+      renderResult();
+    } catch (err) {
+      console.error('Google Sheet submission error:', err);
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+      alert('ثبت اطلاعات با مشکل روبه‌رو شد. لطفاً اتصال اینترنت را بررسی کن و دوباره تلاش کن.');
     }
-    renderResult();
   });
 }
 
-function calculateLeadScore() {
-  let score = 0;
-  const a = quizState.answers;
-  if (a.segment === 'پایه دوازدهم') score += 3;
-  if (a.mainConcern === 'انتخاب اشتباه و پشیمانی') score += 2;
-  if (a.mainConcern === 'قبول نشدن در گزینه دلخواه') score += 2;
-  if (a.certainty === 'بین ۲ یا ۳ گزینه مرددم') score += 2;
-  if (a.certainty === 'گزینه‌های زیادی دارم و گیجم') score += 3;
-  if (a.certainty === 'تقریباً هیچ تصویر روشنی ندارم') score += 3;
-  if (a.help === 'مقایسه گزینه‌ها' || a.help === 'بررسی قبولی با رتبه و شرایط من') score += 2;
-  return score;
-}
+const concernInsights = {
+  'رشته‌ای را انتخاب کنم و بعداً پشیمان شوم.': 'برای تو فقط انتخاب یک رشته مهم نیست؛ می‌خواهی مطمئن شوی تصویری که امروز از آن داری با واقعیت چند سال بعد فاصله زیادی ندارد. کمکت می‌کنیم انتظارت از رشته را با واقعیت تحصیل، کار و سبک زندگی آن کنار هم ببینی تا ریسک پشیمانی کمتر شود.',
+  'رشته‌ای را دوست داشته باشم ولی بازار کار خوبی نداشته باشد.': 'علاقه برای تو مهم است، اما می‌خواهی بدانی این علاقه در آینده می‌تواند به یک مسیر شغلی قابل اتکا تبدیل شود یا نه. کمکت می‌کنیم علاقه را کنار بازار کار، فرصت رشد، درآمد و انعطاف مسیر قرار بدهی تا تصمیم فقط بر پایه جذابیت امروز نباشد.',
+  'انتخابم با سبک زندگی‌ای که می‌خواهم سازگار نباشد.': 'برای تو فقط «چه شغلی داشته باشم؟» مطرح نیست؛ «چطور زندگی کنم؟» هم بخش مهم تصمیم است. کنارتیم تا ساعت و محیط کار، فشار شغلی، انعطاف زمانی و سبک زندگی واقعی مسیرها را وارد تصمیم کنیم.',
+  'بعداً برای مهاجرت یا تغییر مسیر محدود شوم.': 'باز ماندن انتخاب‌های آینده برای تو اهمیت دارد. کمکت می‌کنیم مسیرها را فقط از نظر امروز نبینی و امکان ادامه تحصیل، مهاجرت، تغییر حوزه و مهارت‌های قابل‌انتقال هر مسیر را هم بررسی کنی.',
+  'تحت تأثیر خانواده یا اطرافیان تصمیم نامناسبی بگیرم.': 'بخشی از سختی تصمیم تو، جدا کردن معیارهای خودت از نظر اطرافیان است. کنارتیم تا دلایل و معیارهای انتخابت روشن‌تر شوند و بتوانی تصمیمی بگیری که هم قابل دفاع باشد و هم بیشتر با خودت سازگار باشد.',
+  'با رتبه‌ام انتخاب‌های اشتباهی انجام دهم.': 'برای تو فقط پیدا کردن رشته مناسب کافی نیست؛ باید انتخاب‌ها با رتبه و شرایطت هم واقع‌بینانه باشند. کمکت می‌کنیم محدوده انتخاب‌های خوش‌بینانه، منطقی و مطمئن را روشن‌تر کنی و بعد کیفیت خود گزینه‌ها را بسنجی.',
+  'هنوز دقیق نمی‌دانم.': 'اینکه هنوز یک نگرانی مشخص برایت روشن نیست خودش اطلاعات مهمی است. کمکت می‌کنیم مشخص کنیم ابهامت بیشتر از شناخت خودت می‌آید، شناخت رشته‌ها یا محدودیت انتخاب‌ها تا مسئله تصمیم برایت قابل‌مدیریت‌تر شود.'
+};
+
+const nextStepSuggestions = {
+  'بفهمم چه رشته‌هایی بیشتر به من می‌آیند.': 'قدم بعدی این است که علایق، توانمندی‌ها، ارزش‌ها و سبک کاری مطلوبت را دقیق‌تر بررسی کنیم و از دل آن‌ها چند مسیر ارزشمند برای بررسی عمیق‌تر پیدا کنیم. قرار نیست صرفاً یک اسم رشته به تو بدهیم؛ کمک می‌کنیم منطق پشت گزینه‌هایت را بفهمی.',
+  'بین چند گزینه‌ای که دارم مقایسه کنم.': 'کنارتیم تا معیارهای مهم برای تو را کنار اطلاعات واقعی هر مسیر بگذاریم و ببینیم هر انتخاب چه فرصت‌ها، محدودیت‌ها و هزینه‌هایی دارد؛ تا مقایسه از «کدام رشته بهتر است؟» به «کدام مسیر برای من مناسب‌تر است؟» تبدیل شود.',
+  'واقعیت رشته‌ها و شغل‌های مرتبط را بهتر بشناسم.': 'کمکت می‌کنیم تصویری که از رشته‌ها داری با واقعیت تحصیل، تجربه دانشجوها و فارغ‌التحصیل‌ها و شرایط واقعی کار تطبیق داده شود تا فاصله «تصور» و «واقعیت» قبل از انتخاب روشن شود.',
+  'بفهمم با رتبه‌ام کجاها شانس قبولی دارم.': 'کمکت می‌کنیم رتبه، منطقه، سهمیه و داده‌های قبولی را کنار هم بگذاریم تا محدوده انتخاب‌های واقع‌بینانه‌ات روشن شود؛ بعد در همان محدوده سراغ مقایسه کیفیت گزینه‌ها می‌رویم.',
+  'درباره بازار کار، درآمد و آینده رشته‌ها بدانم.': 'کنارتیم تا مسیر ورود به بازار کار، فرصت‌های شغلی، درآمد، امکان رشد و ریسک‌های آینده گزینه‌ها را با داده و واقعیت بازار مقایسه کنیم؛ نه فقط با شنیده‌ها و برداشت‌های عمومی.',
+  'مسیر مهاجرت هر رشته را بررسی کنم.': 'کمکت می‌کنیم برای هر مسیر قابلیت انتقال مدرک، ادامه تحصیل، ورود به بازار کار خارج از ایران و محدودیت‌های احتمالی مهاجرت را جداگانه بررسی کنی تا آینده بین‌المللی انتخابت روشن‌تر شود.',
+  'بتوانم با خانواده درباره انتخابم منطقی‌تر صحبت کنم.': 'کنارتیم تا معیارها، اطلاعات و دلایل انتخابت را شفاف کنیم و گفت‌وگو با خانواده از «من این را دوست دارم» و «ما فکر می‌کنیم آن بهتر است» به یک گفت‌وگوی مبتنی بر شواهد و معیارهای روشن تبدیل شود.',
+  'یک نفر کل شرایط من را ببیند و کمکم کند تصمیم نهایی بگیرم.': 'قدم بعدی این است که تصویر کامل‌تری از خودت، گزینه‌ها، محدودیت‌ها و آینده احتمالی مسیرها کنار هم قرار بگیرد. کمکت می‌کنیم این اطلاعات پراکنده را به یک تصمیم چندمعیاره و قابل‌دفاع تبدیل کنی.'
+};
 
 function renderResult() {
-  const a = quizState.answers;
-  const headline = a.priority || 'معیارهای شخصی تو';
-  const need = a.help || 'شفاف‌تر کردن مسیر';
-  const concern = a.mainConcern || 'ابهام در تصمیم';
+  const concern = quizState.answers.concern || '';
+  const helpNeeded = quizState.answers.helpNeeded || '';
+  const insight = concernInsights[concern] || 'کمکت می‌کنیم مسئله اصلی تصمیم را روشن‌تر کنیم تا بدانی دقیقاً کدام بخش نیاز به بررسی عمیق‌تر دارد.';
+  const nextStep = nextStepSuggestions[helpNeeded] || 'کنارتیم تا قدم بعدی را براساس شرایط و معیارهای خودت مشخص کنیم و مسیر را مرحله‌به‌مرحله جلو ببریم.';
+
   quizContent.innerHTML = `
-    <div class="quiz-page result-box">
+    <div class="quiz-page result-box decision-map-result">
       <span class="mini-badge">نقشه اولیه تصمیم تو</span>
-      <h2>الان تصمیم تو بیشتر حول این سه محور می‌چرخد:</h2>
-      <div class="result-pill">اولویت اصلی: ${escapeHtml(headline)}</div>
-      <div class="result-pill">دغدغه اصلی: ${escapeHtml(concern)}</div>
-      <div class="result-pill">کمکی که بیشترین ارزش را دارد: ${escapeHtml(need)}</div>
-      <p>این نتیجه تشخیص یا نسخه نهایی نیست؛ فقط یک نقطه شروع است تا بفهمیم در ادامه باید کجا را دقیق‌تر بررسی کنیم.</p>
-      <div class="result-actions">
-        <a href="#results" class="secondary-btn" id="seeResultsBtn">دیدن نتایج اخیر</a>
-        <button class="primary-btn" type="button" id="consultBtn">درخواست مشاوره</button>
+      <h2>پیشنهاد ما برای قدم بعدی تو</h2>
+      <div class="decision-result-card">
+        <span>چیزی که الان باید روشن‌تر شود</span>
+        <p>${escapeHtml(insight)}</p>
       </div>
+      <div class="decision-result-card decision-result-next">
+        <span>قدم بعدی پیشنهادی ما</span>
+        <p>${escapeHtml(nextStep)}</p>
+      </div>
+      <p class="result-note"><strong>این فقط یک تصویر اولیه از وضعیت فعلی تصمیم توست.</strong><br>برای بررسی دقیق‌تر شرایطت، به‌زودی با تو تماس می‌گیریم.</p>
+      <button class="primary-btn" type="button" id="closeResultBtn">متوجه شدم</button>
     </div>
   `;
-  document.getElementById('seeResultsBtn').addEventListener('click', () => {
-    closeQuiz();
-    track('results_from_quiz_clicked');
-  });
-  document.getElementById('consultBtn').addEventListener('click', () => {
-    track('consultation_clicked');
-    alert('در مرحله بعد این دکمه را به واتساپ یا فرم رزرو مشاوره وصل می‌کنیم.');
-  });
+  document.getElementById('closeResultBtn').addEventListener('click', closeQuiz);
 }
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
 }
-
-
-
 
 
 // Sequential chat reveal — replays every time the user scrolls away and back.

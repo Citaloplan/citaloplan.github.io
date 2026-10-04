@@ -69,7 +69,7 @@ function render(m){
   <section class="hero"><div class="eyebrow">پرونده واقعیت رشته • شخصی‌سازی‌شده برای ${esc(student.name)}</div><h2>${esc(m.name)}</h2><p>${esc(m.tagline)}</p><div class="quick"><span class="chip">${esc(m.degree)}</span><span class="chip">${esc(m.duration)}</span><span class="chip">${esc(m.contact)}</span><span class="chip">${esc(m.practical)}</span><span class="chip">${esc(m.pressure)}</span><span class="chip">${esc(m.independence)}</span></div></section>
 
   <section class="card profile-lens"><h3>لنز شخصی ${esc(student.name)} برای خواندن این رشته</h3>
-  <div class="profile-row"><span class="profile-pill">RIASEC: ${esc(student.code)}</span><span class="profile-pill">${esc(student.scores)}</span><span class="profile-pill">تمرکز تصمیم: واقعیت روزمره + استقلال + درآمد + اثرگذاری</span></div>
+  <div class="profile-row"><span class="profile-pill">RIASEC: ${esc(student.code)}</span><span class="profile-pill">${esc(student.scores)}</span><span class="profile-pill">تمرکز تصمیم: ${esc((student.focus||[]).join(" + "))}</span></div>
   <p>${esc(student.core)}</p><p>${esc(student.decision)}</p><p class="subtle">${esc(student.values)}</p></section>
 
   <div class="notice"><b>درآمد:</b> اعداد ۱۴۰۵ در JobVision و IranTalent عمدتاً «حقوق درخواستی/مورد انتظار» هستند، نه پرداخت قطعی ۱۴۰۵. هرجا گروه شغلی دقیقاً معادل این رشته نباشد، به‌عنوان benchmark نزدیک توضیح داده شده است.</div>
@@ -120,23 +120,10 @@ function render(m){
 
 const nav=document.getElementById('nav');
 const select=document.getElementById('mobileSelect');
-const shortlistSet = new Set(student.shortlist || majors.map(m=>m.id));
-const visibleMajors = majors.filter(m=>shortlistSet.has(m.id));
-
-visibleMajors.forEach(m=>{
-  const b=document.createElement('button');
-  b.className='major-btn';
-  b.dataset.id=m.id;
-  b.textContent=m.name;
-  b.onclick=()=>render(m);
-  nav.appendChild(b);
-
-  const o=document.createElement('option');
-  o.value=m.id;
-  o.textContent=m.name;
-  select.appendChild(o);
-});
-
+const byIdNav=Object.fromEntries(majors.map(m=>[m.id,m]));
+const visibleMajors=(student.shortlist||majors.map(m=>m.id)).map(id=>byIdNav[id]).filter(Boolean);
+function addBtn(m){const b=document.createElement('button');b.className='major-btn';b.dataset.id=m.id;b.textContent=m.name;b.onclick=()=>render(m);nav.appendChild(b);}
+if(student.shortlistGroups?.length){student.shortlistGroups.forEach(g=>{const lab=document.createElement('div');lab.className='nav-group-label';lab.textContent=g.title;nav.appendChild(lab);const og=document.createElement('optgroup');og.label=g.title;(g.ids||[]).map(id=>byIdNav[id]).filter(Boolean).forEach(m=>{addBtn(m);const o=document.createElement('option');o.value=m.id;o.textContent=m.name;og.appendChild(o);});select.appendChild(og);});} else {visibleMajors.forEach(m=>{addBtn(m);const o=document.createElement('option');o.value=m.id;o.textContent=m.name;select.appendChild(o);});}
 select.onchange=()=>render(visibleMajors.find(m=>m.id===select.value));
 
 const requestedMajor = params.get('major');

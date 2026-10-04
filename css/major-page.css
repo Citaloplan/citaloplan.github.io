@@ -122,3 +122,5 @@ body,p,li,span,div,small,label,a,button,select,textarea,input{
 }
 .grad-programs-label{margin-top:18px}
 .grad-path-text{margin:0;line-height:1.95}
+
+.nav-group-label{margin:14px 10px 7px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:700}.nav-group-label:first-child{border-top:0;margin-top:4px}

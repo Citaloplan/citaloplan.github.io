@@ -6,6 +6,10 @@
     kiana: {
       id: "kiana",
       passwordHash: "b58dcef0597c2c5522468fad806a57adb58735d1e49e2b3691aaca673bb2b5e3"
+    },
+    romisa: {
+      id: "romisa",
+      passwordHash: "586b9c3e51baa98c0311aa5346daae40d25740d63d30108c317ee291ba269543"
     }
   };
 
