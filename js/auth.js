@@ -10,6 +10,10 @@
     romisa: {
       id: "romisa",
       passwordHash: "586b9c3e51baa98c0311aa5346daae40d25740d63d30108c317ee291ba269543"
+    },
+    artina: {
+      id: "artina",
+      passwordHash: "d96a67a94cb63fb333c78790b51ab8a8e013467162673172cddaca40bd17a956"
     }
   };
 

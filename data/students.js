@@ -71,12 +71,14 @@ window.CITALOPLAN_STUDENTS = {
       "appliedchem",
       "foodscience",
       "foodengineering",
+      "biomedical",
       "hse",
       "nursing",
       "healthservices",
       "healthit",
       "accounting",
       "industrial",
+      "industrialeng",
       "business",
       "financial",
       "economics",
@@ -99,6 +101,7 @@ window.CITALOPLAN_STUDENTS = {
           "appliedchem",
           "foodscience",
           "foodengineering",
+          "biomedical",
           "hse",
           "nursing",
           "healthservices"
@@ -110,6 +113,7 @@ window.CITALOPLAN_STUDENTS = {
           "healthit",
           "accounting",
           "industrial",
+          "industrialeng",
           "business",
           "financial",
           "economics",
@@ -120,7 +124,7 @@ window.CITALOPLAN_STUDENTS = {
         ]
       },
       {
-        "title": "Reality Check تکمیلی",
+        "title": "بررسی واقعیت تکمیلی",
         "ids": [
           "chemicaleng",
           "insurance",

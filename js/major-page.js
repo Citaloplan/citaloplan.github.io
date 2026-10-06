@@ -20,18 +20,40 @@ document.getElementById('shortlistTitle').textContent = `لیست انتخابی
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 function salaryHTML(s){return `<div class="salary-source"><div class="salary-head"><strong>${esc(s.label)}</strong><small>${esc(s.note||'')}</small></div><div class="range"><span>${s.p25}</span><div class="line"></div><span class="median">${s.median}</span><div class="line"></div><span>${s.p75}</span></div><div class="range-labels"><span>چارک ۲۵٪</span><span>میانه</span><span>چارک ۷۵٪</span></div></div>`}
 function list(arr){return `<ul class="clean">${(arr||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`}
+function roleRealityHTML(m){
+  const r=m.roleReality; if(!r) return '';
+  return `<section class="card role-reality"><h3>این رشته دقیقاً چه مسئله‌ای را حل می‌کند؟</h3><p class="role-problem">${esc(r.problem)}</p><div class="role-grid"><div><h4>خروجی‌های واقعی کار</h4>${list(r.outputs)}</div><div><h4>شغل‌های شروع مسیر</h4>${list(r.firstJobs)}</div></div><div class="reality-callout"><b>واقعیت مهم:</b> ${esc(r.reality)}</div></section>`;
+}
+function curriculumHTML(m){
+  const c=m.curriculum; if(!c) return '';
+  const groups=(c.groups||[]).map(g=>`<details class="course-group"><summary>${esc(g.title)}</summary><div class="course-full-list">${(g.courses||[]).map(x=>`<span>${esc(x)}</span>`).join('')}</div></details>`).join('');
+  const imgs=(c.images||[]).map((src,i)=>`<a class="curriculum-page" href="${esc(src)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(src)}" alt="بخش ${i+1} چارت رسمی ${esc(m.name)}"><span>بخش ${i+1} • مشاهده بزرگ</span></a>`).join('');
+  const pdf=c.pdf?`<a class="source-action" href="${esc(c.pdf)}" target="_blank" rel="noopener">مشاهده برنامه درسی کامل</a>`:'';
+  return `<section class="card curriculum-card"><div class="curriculum-head"><div><h3>${esc(c.heading||'تمام دروس مصوب؛ بدون خلاصه‌سازی')}</h3><h4>${esc(c.title)}</h4><p class="curriculum-meta">${esc(c.meta||'')}</p></div><div class="source-actions">${pdf}</div></div>${c.note?`<div class="curriculum-note">${esc(c.note)}</div>`:''}${groups}${imgs?`<details class="official-pages" open><summary>جدول‌های کامل برنامه درسی (${(c.images||[]).length} بخش)</summary><div class="curriculum-gallery">${imgs}</div></details>`:''}</section>`;
+}
+function salaryReportsHTML(m){
+  if(!(m.salaryReports||[]).length) return '';
+  return `<section class="card salary-evidence"><h3>گزارش حقوق ۱۴۰۵</h3><div class="salary-report-grid">${m.salaryReports.map(r=>`<figure><a href="${esc(r.image)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(r.image)}" alt="${esc(r.title)}"></a><figcaption><strong>${esc(r.title)}</strong></figcaption></figure>`).join('')}</div></section>`;
+}
+const GRAD_HIGHLIGHTS = {
+  industrialeng:['سیستم‌های تولید و خدمات','مدل‌سازی سیستم‌ها و تحلیل داده‌ها','روش‌های بهینه‌سازی','سیستم‌های سلامت','مدیریت نوآوری و فناوری','سیستم‌های مالی','لجستیک و زنجیره تأمین','مدیریت پروژه','کیفیت و بهره‌وری','سیستم‌های اطلاعاتی'],
+  architecture:['مهندسی معماری','معماری پایدار','فناوری معماری','معماری داخلی','مطالعات معماری ایران','مرمت و احیای بناها و بافت‌های تاریخی','بازسازی پس از سانحه','معماری و نور'],
+  electrical:['مدارهای مجتمع الکترونیک','سیستم‌های انرژی الکتریکی','الکترونیک قدرت و ماشین‌های الکتریکی','مخابرات','کنترل','سیستم‌های دیجیتال','بیوالکتریک','مکاترونیک','رباتیک','مهندسی عصبی-شناختی'],
+  mechanical:['مکانیک جامدات','دینامیک، کنترل و ارتعاشات','تبدیل انرژی و سامانه‌های انرژی','ساخت و تولید','بیومکانیک','مکاترونیک','رباتیک','مهندسی خودرو','محاسبات مهندسی','مهندسی ورزش'],
+  biomedical:['بیوالکتریک','بیومکانیک','بیومتریال','مهندسی بافت','مهندسی اطلاعات پزشکی','رایانش تصاویر پزشکی','مهندسی عصبی-شناختی','هوش مصنوعی در پزشکی'],
+  engineeringscience:['بهینه‌سازی و سیستم‌ها','علم داده و محاسبات','سیستم‌های پیچیده','برق و کنترل','مکانیک و انرژی','مهندسی کامپیوتر','مهندسی عمران','مهندسی مواد','مهندسی شیمی'],
+  economics:['اقتصاد نظری','اقتصاد مالی','اقتصاد انرژی','اقتصاد دیجیتال','توسعه اقتصادی و برنامه‌ریزی','اقتصاد محیط‌زیست','اقتصاد شهری','اقتصاد و تجارت الکترونیک'],
+  financial:['مدیریت مالی','مهندسی مالی و مدیریت ریسک','بانکداری','بیمه','فناوری مالی','تأمین مالی و سرمایه‌گذاری'],
+  industrial:['تحقیق در عملیات','تولید و عملیات','مدیریت عملکرد','مدیریت زنجیره تأمین','مدیریت کیفیت و بهره‌وری','مدیریت پروژه']
+};
 function gradHTML(m){
-  const items=(m.gradItems||[]).map(x=>`<span class="grad-chip">${esc(x)}</span>`).join('');
-  const note=m.gradNote?`<div class="grad-note">${esc(m.gradNote)}</div>`:'';
-  return `
-    <div class="grad-section-label">مسیرهای ادامه تحصیل</div>
-    <p class="grad-path-text">${esc(m.grad)}</p>
-    ${items?`
-      <div class="grad-section-label grad-programs-label">رشته‌ها و گرایش‌های ارشد</div>
-      <div class="grad-chips">${items}</div>
-    `:''}
-    ${note}
-  `;
+  let items = GRAD_HIGHLIGHTS[m.id] || (m.gradItems||[]);
+  if(!items.length && (m.gradGroups||[]).length){
+    items = m.gradGroups.flatMap(g=>g.items||[]).map(x=>String(x).replace(/^.*?—\s*/,''));
+  }
+  items=[...new Set(items)].slice(0,10);
+  if(!items.length) return m.grad?`<p class="grad-path-text">${esc(m.grad)}</p>`:'';
+  return `<div class="grad-section-label">مسیرها و گرایش‌هایی که می‌توان در ادامه بررسی کرد</div><div class="grad-chips">${items.map(x=>`<span class="grad-chip">${esc(x)}</span>`).join('')}</div>`;
 }
 
 function realVoiceHTML(id){
@@ -39,14 +61,12 @@ function realVoiceHTML(id){
   if(!v) return ``;
   const bullet=(arr)=>`<ul class="clean">${arr.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
   return `<section class="card real-voice">
-    <h3>از دل رشته؛ تجربه واقعی دانشجویان و فارغ التحصیلان</h3>
-    <p class="voice-intro">${esc(v.source_count)} — این بخش جمع‌بندیِ تجربه‌های ارسالی است؛ نه حکم قطعی درباره همه دانشگاه‌ها و همه شاغلان.</p>
+    <h3>از دل رشته</h3>
     <div class="voice-grid">
       <div class="voice-card daily"><h4>روزمره‌ای که از بیرون دیده نمی‌شود</h4>${bullet(v.daily)}</div>
-      <div class="voice-card good"><h4>چیزهایی که خودشان دوست داشتند</h4>${bullet(v.good)}</div>
-      <div class="voice-card hard"><h4>چیزهایی که گفتند باید قبل از انتخاب بدانی</h4>${bullet(v.hard)}</div>
+      <div class="voice-card good"><h4>چیزهایی که دانشجوها دوست داشتند</h4>${bullet(v.good)}</div>
+      <div class="voice-card hard"><h4>چیزهایی که بهتر است قبل از انتخاب بدانی</h4>${bullet(v.hard)}</div>
     </div>
-    <div class="voice-note">${esc(v.note)}</div>
   </section>`;
 }
 
@@ -61,7 +81,7 @@ function render(m){
   const ex=expanded[m.id]||{courses:[],university:'',work:'',market_extra:''};
   const wl=worklife[m.id]||{score:null,sat_label:'',sat:'',pressure_label:'',pressure:'',style_label:'',style:''};
   const sf=studentFit[m.id]||{why:[],friction:[],question:''};
-  const salary = m.salaries.length?m.salaries.map(salaryHTML).join(''):`<div class="notice">برای این رشته در دو گزارش ارسالی، گروه شغلی مستقیمی که بتوان با اطمینان به خود رشته نسبت داد پیدا نشد؛ بنابراین عددسازی نکرده‌ایم.</div>`;
+  const salary = (m.salaries||[]).length?m.salaries.map(salaryHTML).join(''):`<div class="notice">برای این رشته در دو گزارش ارسالی، گروه شغلی مستقیمی که بتوان با اطمینان به خود رشته نسبت داد پیدا نشد؛ بنابراین عددسازی نکرده‌ایم.</div>`;
   const courseHTML=(ex.courses||[]).map(c=>`<span class="course-chip">${esc(c)}</span>`).join('');
   const scoreHTML=wl.score?`<span class="score-inline">${esc(wl.score)}</span>`:'';
 
@@ -72,9 +92,9 @@ function render(m){
   <div class="profile-row"><span class="profile-pill">RIASEC: ${esc(student.code)}</span><span class="profile-pill">${esc(student.scores)}</span><span class="profile-pill">تمرکز تصمیم: ${esc((student.focus||[]).join(" + "))}</span></div>
   <p>${esc(student.core)}</p><p>${esc(student.decision)}</p><p class="subtle">${esc(student.values)}</p></section>
 
-  <div class="notice"><b>درآمد:</b> اعداد ۱۴۰۵ در JobVision و IranTalent عمدتاً «حقوق درخواستی/مورد انتظار» هستند، نه پرداخت قطعی ۱۴۰۵. هرجا گروه شغلی دقیقاً معادل این رشته نباشد، به‌عنوان benchmark نزدیک توضیح داده شده است.</div>
-
   <section class="card accent-brick"><h3>رشته در ۶۰ ثانیه</h3><p>${esc(m.intro)}</p></section>
+
+  ${roleRealityHTML(m)}
 
   <div class="grid2">
     <section class="card accent-yellow"><h3>در دانشگاه چه می‌گذرد؟</h3><p>${esc(m.university)}</p>
@@ -82,6 +102,8 @@ function render(m){
     <section class="card accent-green"><h3>یک روز واقعی از این کار</h3><p>${esc(m.day)}</p>
     <div class="detail-block"><span class="mini-title">آن چیزی که معمولاً در معرفی‌های کوتاه گفته نمی‌شود:</span><p>${esc(ex.work)}</p></div></section>
   </div>
+
+  ${curriculumHTML(m)}
 
   <section class="card"><h3>مهارت‌هایی که تعیین‌کننده‌اند:</h3>${list(m.skills)}</section>
 
@@ -91,6 +113,8 @@ function render(m){
 
   <section class="card"><h3>درآمد</h3>${salary}</section>
 
+  ${salaryReportsHTML(m)}
+
   <section class="card worklife"><h3>رضایت شغلی، فشار کاری و سبک زندگی — به زبان ساده</h3>
   <p class="worklife-intro">این سه موضوع را جدا می‌کنیم، چون ممکن است یک شغل درآمد یا اعتبار خوبی داشته باشد اما سبک زندگی‌اش با تو جور نباشد؛ یا برعکس، فشارش متوسط باشد ولی از ماهیت کارش انرژی بگیری.</p>
   <div class="worklife-grid">
@@ -99,7 +123,7 @@ function render(m){
     <div class="life-card style"><h4>🌿 سبک زندگی</h4><div class="life-value">${esc(wl.style_label)}</div><p>${esc(wl.style)}</p></div>
   </div></section>
 
-  <section class="card"><h3>Expectation vs Reality</h3><div class="myth"><div class="m"><b>تصور رایج</b>${esc(m.myth[0])}</div><div class="r"><b>واقعیت</b>${esc(m.myth[1])}</div></div></section>
+  <section class="card"><h3>تصور رایج در برابر واقعیت</h3><div class="myth"><div class="m"><b>تصور رایج</b>${esc(m.myth[0])}</div><div class="r"><b>واقعیت</b>${esc(m.myth[1])}</div></div></section>
 
   <section class="card ai"><h3>آینده رشته و AI</h3><p>${esc(m.ai)}</p></section>
 
@@ -107,11 +131,11 @@ function render(m){
 
   ${realVoiceHTML(m.id)}
 
-  <section class="card shortlist"><h3>این رشته برای ${esc(student.name)}: دقیقاً کجایش می‌تواند جذاب یا اصطکاک‌زا باشد؟</h3>
+    <section class="card shortlist"><h3>این رشته برای ${esc(student.name)}: دقیقاً کجایش می‌تواند جذاب یا اصطکاک‌زا باشد؟</h3>
   <div class="personal-grid">
     <div class="personal-box why"><h4>چرا ممکن است جذاب باشد؟</h4>${list(sf.why)}</div>
     <div class="personal-box friction"><h4>کجا ممکن است اذیتت کند؟</h4>${list(sf.friction)}</div>
-    <div class="personal-box check"><h4>سؤال Reality Check مخصوص تو</h4><p>${esc(sf.question)}</p></div>
+    <div class="personal-box check"><h4>سؤال بررسی واقعیت مخصوص تو</h4><p>${esc(sf.question)}</p></div>
   </div></section>
   `;
 

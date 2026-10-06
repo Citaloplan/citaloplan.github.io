@@ -124,3 +124,44 @@ body,p,li,span,div,small,label,a,button,select,textarea,input{
 .grad-path-text{margin:0;line-height:1.95}
 
 .nav-group-label{margin:14px 10px 7px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:700}.nav-group-label:first-child{border-top:0;margin-top:4px}
+
+/* ===== V24 — Artina: full official curricula + salary evidence ===== */
+.role-reality{background:linear-gradient(135deg,#fffdf8 0%,#fff 65%);border-top:5px solid var(--yellow)}
+.role-problem{font-size:16px;line-height:2;margin-bottom:14px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.role-grid>div{padding:15px 17px;border-radius:18px;background:#fbf8f5;border:1px solid var(--line)}.role-grid h4{margin:0 0 6px;color:var(--burgundy)}
+.reality-callout{margin-top:13px;padding:13px 16px;border-radius:15px;background:#f1f8f3;border-right:5px solid var(--green);line-height:1.95}
+.curriculum-card{border-top:6px solid var(--green);background:#fff}
+.curriculum-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}.curriculum-head h3{margin-bottom:4px}.curriculum-head h4{margin:0;color:var(--green-ink);font-size:17px}.curriculum-meta{color:var(--muted);margin:5px 0 0}.curriculum-note{margin:15px 0;padding:14px 16px;border-radius:16px;background:#eef7f1;border:1px solid #d1e7d8;line-height:2}
+.source-actions{display:flex;gap:8px;flex-wrap:wrap}.source-action{display:inline-flex;padding:9px 13px;border-radius:12px;background:var(--brick);color:white;text-decoration:none;font-size:14px}.source-action.secondary{background:#f6eef9;color:#5d3c77;border:1px solid #dfcfe9}
+.course-group{border:1px solid var(--line);border-radius:14px;padding:0 13px;margin:10px 0;background:#fffdf9}.course-group summary,.official-pages summary{cursor:pointer;font-weight:700;color:var(--burgundy);padding:12px 0}.course-full-list{display:flex;flex-wrap:wrap;gap:7px;padding:0 0 14px}.course-full-list span{padding:6px 10px;border-radius:999px;background:#f7f2fb;border:1px solid #e3d6ec;font-size:13px}
+.official-pages{margin-top:14px;border-top:1px dashed var(--line);padding-top:4px}.curriculum-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}.curriculum-page{display:flex;flex-direction:column;text-decoration:none;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:white;transition:.15s transform ease,.15s box-shadow ease}.curriculum-page:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(70,55,55,.08)}.curriculum-page img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;object-position:top;background:#fafafa;display:block}.curriculum-page span{padding:8px 10px;color:var(--burgundy);font-size:12px;text-align:center}
+.salary-evidence{border-top:6px solid var(--purple)}.salary-report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}.salary-report-grid figure{margin:0;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff}.salary-report-grid a{display:block;background:#f7f7f7}.salary-report-grid img{display:block;width:100%;height:auto}.salary-report-grid figcaption{display:flex;flex-direction:column;gap:5px;padding:13px}.salary-report-grid figcaption strong{font-size:14px;color:var(--burgundy)}.salary-report-grid figcaption span{font-size:13px;color:var(--muted);line-height:1.8}
+.evidence-sources{background:#f7f5fb;border-right:5px solid var(--purple)}.source-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.source-list span{padding:7px 10px;border-radius:11px;background:#fff;border:1px solid #e4ddec;font-size:12px;color:#61596a}
+@media(max-width:980px){.role-grid{grid-template-columns:1fr}.curriculum-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.salary-report-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.curriculum-gallery{grid-template-columns:1fr}.curriculum-page img{aspect-ratio:auto}.source-actions{width:100%}.source-action{flex:1;justify-content:center}}
+.source-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.source-links a{display:inline-flex;padding:8px 11px;border-radius:11px;background:#fff;color:var(--burgundy);border:1px solid #dcd2e4;text-decoration:none;font-size:13px}.source-links a:hover{background:#fff9f4}
+
+/* ===== V27 — structured official MSc map from Sanjesh 1405 ===== */
+.grad-groups{display:grid;gap:10px;margin-top:10px}
+.grad-group{border:1px solid #eadfea;border-radius:16px;background:#fff;overflow:hidden}
+.grad-group summary{position:relative;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;color:var(--burgundy);font-weight:700;background:#fbf7fc}
+.grad-group summary::-webkit-details-marker{display:none}
+.grad-group summary:after{content:'＋';font-size:18px;color:var(--purple);margin-right:auto}
+.grad-group[open] summary:after{content:'−'}
+.grad-group summary small{font-weight:400;color:var(--muted);font-size:12px;margin-right:8px}
+.grad-group-items{display:flex;flex-wrap:wrap;gap:8px;padding:13px 14px 15px}
+.grad-group-note{padding:0 14px 14px;margin:0;color:var(--muted);font-size:13px}
+.grad-source{margin-top:16px;padding:13px 14px;border-radius:15px;background:#eef7f1;border:1px solid #cfe6d6;display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.grad-source>div{display:flex;flex-direction:column;gap:2px}.grad-source b{color:var(--green-ink)}.grad-source span{font-size:14px}.grad-source small{color:var(--muted)}
+.grad-source a{display:inline-flex;padding:8px 12px;border-radius:11px;background:var(--green-ink);color:white;text-decoration:none;font-size:13px}
+@media(max-width:620px){.grad-group summary{align-items:flex-start;flex-direction:column;padding-left:42px}.grad-group summary:after{position:absolute;left:14px;top:12px}.grad-source a{width:100%;justify-content:center}}
+
+/* V29 cleanup: concise, structured personal lens and simplified continuation paths */
+.lens-copy{display:grid;gap:11px;margin-top:14px}
+.lens-copy>div{background:rgba(255,255,255,.72);border:1px solid #eee0ca;border-radius:16px;padding:12px 14px}
+.lens-copy b{display:block;color:var(--burgundy);margin-bottom:3px;font-size:15px}
+.lens-copy p{margin:0;color:#4e4148}
+.grad-card .grad-chips{margin-top:12px}
+.grad-card .grad-chip{background:#f7f0fb;border:1px solid #e5d5ed;color:#5d376d}
+.real-voice .voice-grid{margin-top:10px}
+@media(max-width:700px){.lens-copy>div{padding:11px 12px}}
