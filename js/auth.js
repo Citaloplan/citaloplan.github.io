@@ -14,6 +14,10 @@
     artina: {
       id: "artina",
       passwordHash: "d96a67a94cb63fb333c78790b51ab8a8e013467162673172cddaca40bd17a956"
+    },
+    amirkashef: {
+      id: "amirkashef",
+      passwordHash: "c2fb95d583e44eb10e733e668a87b5ac60d8117c7d5280f18fcc05d737ed1d1a"
     }
   };
 

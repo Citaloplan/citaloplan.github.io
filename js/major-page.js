@@ -80,7 +80,14 @@ function render(m){
 
   const ex=expanded[m.id]||{courses:[],university:'',work:'',market_extra:''};
   const wl=worklife[m.id]||{score:null,sat_label:'',sat:'',pressure_label:'',pressure:'',style_label:'',style:''};
-  const sf=studentFit[m.id]||{why:[],friction:[],question:''};
+  const sf=studentFit[m.id]||null;
+  const personalFitHTML = sf && ((sf.why||[]).length || (sf.friction||[]).length || sf.question) ? `
+    <section class="card shortlist"><h3>این رشته برای ${esc(student.name)}: دقیقاً کجایش می‌تواند جذاب یا اصطکاک‌زا باشد؟</h3>
+  <div class="personal-grid">
+    <div class="personal-box why"><h4>چرا ممکن است جذاب باشد؟</h4>${list(sf.why||[])}</div>
+    <div class="personal-box friction"><h4>کجا ممکن است اذیتت کند؟</h4>${list(sf.friction||[])}</div>
+    <div class="personal-box check"><h4>سؤال بررسی واقعیت مخصوص تو</h4><p>${esc(sf.question||'')}</p></div>
+  </div></section>` : '';
   const salary = (m.salaries||[]).length?m.salaries.map(salaryHTML).join(''):`<div class="notice">برای این رشته در دو گزارش ارسالی، گروه شغلی مستقیمی که بتوان با اطمینان به خود رشته نسبت داد پیدا نشد؛ بنابراین عددسازی نکرده‌ایم.</div>`;
   const courseHTML=(ex.courses||[]).map(c=>`<span class="course-chip">${esc(c)}</span>`).join('');
   const scoreHTML=wl.score?`<span class="score-inline">${esc(wl.score)}</span>`:'';
@@ -131,12 +138,7 @@ function render(m){
 
   ${realVoiceHTML(m.id)}
 
-    <section class="card shortlist"><h3>این رشته برای ${esc(student.name)}: دقیقاً کجایش می‌تواند جذاب یا اصطکاک‌زا باشد؟</h3>
-  <div class="personal-grid">
-    <div class="personal-box why"><h4>چرا ممکن است جذاب باشد؟</h4>${list(sf.why)}</div>
-    <div class="personal-box friction"><h4>کجا ممکن است اذیتت کند؟</h4>${list(sf.friction)}</div>
-    <div class="personal-box check"><h4>سؤال بررسی واقعیت مخصوص تو</h4><p>${esc(sf.question)}</p></div>
-  </div></section>
+  ${personalFitHTML}
   `;
 
   window.scrollTo({top:0,behavior:'smooth'});

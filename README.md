@@ -11,3 +11,9 @@
 
 ## آپلود روی GitHub
 محتویات پوشه `cita_v31` را در ریشه Repository قرار دهید. تعداد کل فایل‌های این نسخه زیر 100 فایل است تا محدودیت آپلودر وب GitHub مشکل‌ساز نشود.
+
+
+## V33 — CS vs CE + student voices
+- Added a compact reusable **CS VS CE** comparison block for Amir-Kashef's profile (activated when his student record is added / `showCsCeCompare` is enabled).
+- Added summarized student experiences for Computer Science and Computer Engineering to the shared major experience bank.
+- Added “از دل رشته” aggregate panels for both computing majors, while keeping university-specific opinions separate from general major facts.

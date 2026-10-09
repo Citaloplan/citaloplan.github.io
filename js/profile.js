@@ -30,6 +30,26 @@ if (studentId) {
     if(student.shortlistGroups?.length){ grid.classList.add('grouped-major-grid'); grid.innerHTML=student.shortlistGroups.map(g=>`<section class="major-group"><div class="major-group-head"><h3>${g.title}</h3></div><div class="major-grid-inner">${(g.ids||[]).map(cardHTML).join('')}</div></section>`).join(''); }
     else { grid.innerHTML=student.shortlist.map(cardHTML).join(''); }
 
+    // Short CS vs CE comparison. It is shown for Amir-Kashef (and can be enabled for any future profile).
+    const compareWrap = document.getElementById('csCeCompareWrap');
+    const compareBox = document.getElementById('csCeCompare');
+    const hasBothComputingMajors = (student.shortlist || []).includes('computereng') && (student.shortlist || []).includes('computerscience');
+    const shouldShowCsCe = !!student.showCsCeCompare || (studentId === 'amirkashef' && hasBothComputingMajors);
+    const csce = window.CITALOPLAN_COMPARISONS && window.CITALOPLAN_COMPARISONS.csVsCe;
+    if (compareWrap && compareBox && shouldShowCsCe && csce) {
+      compareWrap.hidden = false;
+      const rows = (csce.rows || []).map(r => `
+        <div class="compare-row">
+          <div class="compare-label">${r.label}</div>
+          <div class="compare-cell cs-cell"><b>علوم کامپیوتر</b><span>${r.cs}</span></div>
+          <div class="compare-cell ce-cell"><b>مهندسی کامپیوتر</b><span>${r.ce}</span></div>
+        </div>`).join('');
+      compareBox.innerHTML = `
+        <div class="compare-lead">${csce.lead}</div>
+        <div class="compare-table">${rows}</div>
+        <div class="compare-bottom"><strong>جمع‌بندی:</strong> ${csce.bottom}</div>`;
+    }
+
     const modal = document.getElementById('posterModal');
     document.getElementById('openPoster').onclick = () => {
       modal.classList.add('open');
